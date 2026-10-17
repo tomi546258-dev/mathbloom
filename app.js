@@ -1,4 +1,4 @@
-/* MathBloom felület, v2 */
+/* MathBloom felület, v3 */
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);

@@ -1,4 +1,4 @@
-/* MathBloom stíluslap, v2 */
+/* MathBloom stíluslap, v3 */
 :root { --paper:#f8f5ee; --ink:#343b2e; --muted:#686d60; --wine:#743d55; --line:#deddd1; --sage:#dfe4d5; --serif:Georgia,'Times New Roman',serif; --sans:'Segoe UI',Arial,sans-serif; color-scheme:light; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; scroll-padding-top:24px; }

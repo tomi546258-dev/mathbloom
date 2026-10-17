@@ -1,5 +1,5 @@
 /*
- * MathBloom virággenerátor, v2
+ * MathBloom virággenerátor, v3
  *
  * Minden virág ugyanabból az elforgatott ellipszisből épül. A fajták csak abban
  * térnek el, hogy hány ellipszist, mekkora eltolással és milyen forgatási
@@ -72,21 +72,20 @@
     return layouts[count].map(([x,y,r],i) => ({x:x+(rnd()-.5)*26*variation,y:y+(rnd()-.5)*24*variation,r:r*(1+(.93+rnd()*.12-1)*variation),rotation:rnd()*360*variation,index:i}));
   }
 
-  // Melyik helyre melyik fajta kerül. 0%-os változatosságnál a kiválasztott
-  // fajták sorban ismétlődnek, és a seed nem számít. Fölötte véletlen sorrend,
-  // és a változatossággal arányos számú csere.
-  function assignTypes(codes, count, seed, freedom) {
+  // Melyik helyre melyik fajta kerül. Csak a seedtől és a kiválasztott fajtáktól
+  // függ, a változatosságtól nem: a csúszka a szirmok formáját, a virágok kis
+  // elmozdulását és a színeket állítja, azt nem, hogy melyik virág rózsa és melyik tulipán.
+  function assignTypes(codes, count, seed) {
     const pool = codes.split('');
     const list = [];
-    if (pool.length > 1 && freedom > 0) {
+    if (pool.length > 1) {
       const tr = random((seed ^ 0x5BD1E995) >>> 0);
       for (let i = pool.length - 1; i > 0; i--) {
         const j = Math.floor(tr() * (i + 1));
         [pool[i], pool[j]] = [pool[j], pool[i]];
       }
       for (let i = 0; i < count; i++) list.push(pool[i % pool.length]);
-      const swaps = Math.round(count * Math.min(freedom, 1));
-      for (let s = 0; s < swaps; s++) {
+      for (let s = 0; s < count; s++) {
         const a = Math.floor(tr() * count), b = Math.floor(tr() * count);
         [list[a], list[b]] = [list[b], list[a]];
       }
@@ -328,7 +327,7 @@
     const paletteName = Object.hasOwn(palettes,options.palette) ? options.palette : 'dusk';
     const flowerCodes = normalizeFlowers(options.flowers === undefined || options.flowers === null ? 'd' : String(options.flowers));
     const palette = palettes[paletteName], rnd = random(seed), flowers = layout(count,rnd,freedom);
-    const kinds = assignTypes(flowerCodes, count, seed, freedom);
+    const kinds = assignTypes(flowerCodes, count, seed);
     let defs = '<radialGradient id="paper"><stop stop-color="#fffdf4"/><stop offset="1" stop-color="'+palette.background+'"/></radialGradient><radialGradient id="core"><stop stop-color="#edc16e"/><stop offset=".6" stop-color="#c59b57"/><stop offset="1" stop-color="#82693c"/></radialGradient>';
     let stems = '', blooms = '', totalPetals = 0;
     for (const f of flowers) {

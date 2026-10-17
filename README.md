@@ -1,8 +1,12 @@
-# MathBloom v2
+# MathBloom v3
 
 Matematikából, szeretettel. Személyre szabható virágcsokrok, amelyek elforgatott ellipszisekből és irányított véletlenből születnek.
 
 Ez a GitHub Pagesre előkészített változat. A virággenerátor, a fajtaválasztó, a színvilágok, a változatosság csúszka, a címzett és üzenet, az ajándék link és a PNG-képeslap böngészőben működik. Nincs szükség MATLAB-ra vagy buildre.
+
+## Javítás a v3-ban
+
+- A változatosság csúszka már nem változtatja a virágok fajtáját. Azt, hogy melyik helyen milyen virág nyílik, csak a seed és a kiválasztott fajták döntik el; a csúszka a szirmok formáját, a virágok kis elmozdulását és a színeket állítja. A v2-vel 50% vagy nagyobb változatossággal készült linkek ugyanazt a csokrot nyitják meg.
 
 ## Újdonságok a v2-ben
 
@@ -27,7 +31,7 @@ Ha a honlap már él, a **Settings → Pages** beállításokat nem kell újra e
 
 A honlapcím: https://tomi546258-dev.github.io/mathbloom/
 
-A stíluslap és a szkriptek `?v=2` utótaggal töltődnek be, így a böngészők nem keverik a régi és az új fájlokat.
+A stíluslap és a szkriptek `?v=3` utótaggal töltődnek be, így a böngészők nem keverik a régi és az új fájlokat.
 
 ## Látogatásszámláló
 
@@ -59,7 +63,7 @@ A személyes üzenet a linkben szerepel: a link birtokosa elolvashatja. A honlap
 - A virágok azonos seed és beállítások mellett azonosak.
 - A klasszikus dália 3000 véletlen beállításon bitre ugyanazt az SVG-t adja, mint az első változat, a szárjavítástól eltekintve.
 - A fajta cseréje nem rendezi át a többi virág helyét, szárát és színét.
-- 0%-os változatosságnál a fajták sorrendje is rögzített; az új csokor ugyanilyen lesz.
+- A változatosság csúszka nem mozgatja a fajtákat: 0 és 100% között minden állásban ugyanott ugyanaz a fajta nyílik.
 - A GitHub Pages változat relatív fájlutakat használ, így a `/mathbloom/` alkönyvtárban is működik. A számláló HTTPS végpontot fogad, és hibánál nem mutat kitalált számot.
 
 Hivatalos GitHub Pages útmutató: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
