@@ -1,4 +1,4 @@
-/* MathBloom stíluslap, v5 */
+/* MathBloom stíluslap, v6 */
 :root { --paper:#f8f5ee; --ink:#343b2e; --muted:#686d60; --wine:#743d55; --line:#deddd1; --sage:#dfe4d5; --serif:Georgia,'Times New Roman',serif; --sans:'Segoe UI',Arial,sans-serif; color-scheme:light; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; scroll-padding-top:24px; }
@@ -251,8 +251,13 @@ dialog .private-note { font-size:10px!important; padding:10px 12px; border:1px s
 .flower-petals { animation:bloom-in 1.25s cubic-bezier(.2,.65,.25,1) both; transform-box:fill-box; transform-origin:center; }
 .artboard.replaying .flower-petals,.artboard.no-anim .flower-petals { animation:none; }
 
+/* Széles képernyőn a fejléc és a lábléc pontosan a tartalom szélével egy vonalban
+   (a main 1500 px széles, 5% belső margóval) */
+@media(min-width:1500px) {
+  .site-header,footer { margin:0; padding-left:calc((100% - 1500px) / 2 + 5%); padding-right:calc((100% - 1500px) / 2 + 5%); }
+}
+
 @media(min-width:1550px) {
-  .site-header,footer { padding-left:max(5%,calc((100vw - 1350px)/2)); padding-right:max(5%,calc((100vw - 1350px)/2)); margin:0; }
   .intro { padding-top:70px; }
   .controls { padding:38px 43px 30px; }
 }

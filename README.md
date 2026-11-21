@@ -1,8 +1,12 @@
-# MathBloom v5
+# MathBloom v6
 
 Matematikából, szeretettel. Személyre szabható virágcsokrok, amelyek elforgatott ellipszisekből és irányított véletlenből születnek.
 
 Ez a GitHub Pagesre előkészített változat. A virággenerátor, a fajtaválasztó, a színvilágok, a változatosság csúszka, a címzett és üzenet, az ajándék link és a PNG-képeslap böngészőben működik, magyarul és angolul. Nincs szükség MATLAB-ra vagy buildre.
+
+## Javítás a v6-ban
+
+- Széles képernyőn (1500 px fölött) a fejléc és a lábléc pontosan a tartalom szélével egy vonalban van. Eddig kilógtak: 1920 px-en kb. 20, 2560 px-en kb. 50 pixellel, és a nyelvváltó gomb túllógott a csokor dobozának jobb szélén. 1280 és 3440 px között minden szélességen ellenőrizve.
 
 ## Újdonság a v5-ben: angol nyelv
 
@@ -53,7 +57,7 @@ Ha a honlap már él, a **Settings → Pages** beállításokat nem kell újra e
 
 A honlapcím: https://tomi546258-dev.github.io/mathbloom/
 
-A stíluslap és a szkriptek `?v=5` utótaggal töltődnek be, így a böngészők nem keverik a régi és az új fájlokat.
+A stíluslap és a szkriptek `?v=6` utótaggal töltődnek be, így a böngészők nem keverik a régi és az új fájlokat.
 
 ## Látogatásszámláló
 
