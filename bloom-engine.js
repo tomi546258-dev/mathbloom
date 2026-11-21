@@ -1,14 +1,20 @@
 /*
- * MathBloom virággenerátor, v3
+ * MathBloom virággenerátor, v4
  *
  * Minden virág ugyanabból az elforgatott ellipszisből épül. A fajták csak abban
  * térnek el, hogy hány ellipszist, mekkora eltolással és milyen forgatási
  * szabály szerint raknak le.
  *
  * Megismételhetőség: azonos seed és beállítások mellett azonos SVG.
- * A klasszikus dália ('d') ugyanazt adja, mint az első változat, így a régi
- * ajándéklinkek ugyanazt a csokrot nyitják meg. Egy eltérés van: az alacsonyan
- * ülő virágok szára már nem lóg le a kötés alá.
+ *
+ * Két generátor-változat van (gen):
+ *  - gen 1: egyetlen közös véletlenfolyam. Így rajzolódnak a régi linkek: a
+ *    fajta nélküliek a klasszikus dáliát adják pontosan úgy, mint az első
+ *    változat (egy eltérés: az alacsonyan ülő virágok szára már nem lóg le a
+ *    kötés alá), a v2–v3 linkek pedig úgy, ahogy készültek.
+ *  - gen 2: minden virágnak és szerepnek (elrendezés, szár, szín, szirmok,
+ *    virágközép, fajták) saját folyama van, így egy beállítás csak a saját
+ *    hatását változtatja. Az új linkek ezt használják (gen=2).
  */
 (function (root) {
   'use strict';
@@ -95,6 +101,56 @@
     return list;
   }
 
+  // gen 2: 32 bites mag egy (seed, virág sorszáma, szerep) hármasból (murmur3-szerű keverés).
+  function hash32(seed, index, salt) {
+    let h = (seed ^ Math.imul(index + 1, 0x9E3779B1) ^ Math.imul(salt, 0x85EBCA77)) >>> 0;
+    h ^= h >>> 16; h = Math.imul(h, 0x85EBCA6B);
+    h ^= h >>> 13; h = Math.imul(h, 0xC2B2AE35);
+    h ^= h >>> 16;
+    return h >>> 0;
+  }
+  const SALT = { layout: 1, stem: 2, color: 3, head: 4, core: 5, petal: 6, types: 7 };
+
+  // gen 2: a fajták blokkonként véletlen sorrendben követik egymást (egy blokk =
+  // minden kiválasztott fajta egyszer), két egymás utáni virág sosem azonos fajtájú.
+  // A lista a virágok számától független: több virágnál csak új elemek jönnek hozzá.
+  function assignTypesStable(codes, seed) {
+    const tr = random(hash32(seed, 0, SALT.types));
+    const list = [];
+    while (list.length < 9) {
+      const block = codes.split('');
+      for (let i = block.length - 1; i > 0; i--) {
+        const j = Math.floor(tr() * (i + 1));
+        [block[i], block[j]] = [block[j], block[i]];
+      }
+      if (block.length > 1 && block[0] === list[list.length - 1]) {
+        const j = 1 + Math.floor(tr() * (block.length - 1));
+        [block[0], block[j]] = [block[j], block[0]];
+      }
+      list.push(...block);
+    }
+    return list.slice(0, 9);
+  }
+
+  // Szár és három levél. A véletlenszámokat ebben a sorrendben húzza:
+  // tő, hajlás, zöld árnyalat, vastagság, majd levelenként hossz és szög.
+  function stem(f, rnd, freedom, palette, controlledIndex) {
+    const rootX = 449+(f.x-450)*.19, rootY = 806+(rnd()-.5)*33*freedom;
+    const bend = f.x+(450-f.x)*.42+(rnd()-.5)*30*freedom;
+    // A kontrollpont nem kerülhet a szár töve alá, különben a szár lelóg és visszakunkorodik.
+    const ctrlY = Math.min(f.y+230, rootY-40);
+    const green = palette.leaves[controlledIndex(f.index%palette.leaves.length,Math.floor(rnd()*palette.leaves.length))];
+    let svg = '<path d="M'+n(rootX)+' '+n(rootY)+' Q'+n(bend)+' '+n(ctrlY)+' '+n(f.x)+' '+n(f.y)+'" fill="none" stroke="'+green+'" stroke-width="'+n(5.5+(rnd()-.5)*3*freedom)+'" stroke-linecap="round"/>';
+    for(let l=0;l<3;l++) {
+      const t=.45+l*.14, u=1-t;
+      const lx=u*u*rootX+2*u*t*bend+t*t*f.x, ly=u*u*rootY+2*u*t*ctrlY+t*t*f.y;
+      const direction=(l+f.index)%2 ? -1 : 1;
+      const len=87.5+(rnd()-.5)*45*freedom, angle=direction*(42.5+(rnd()-.5)*25*freedom);
+      svg += '<g transform="translate('+n(lx)+' '+n(ly)+') rotate('+n(angle)+')"><path d="M0 0 Q'+n(-len*.49)+' '+n(-len*.58)+' 0 '+n(-len)+' Q'+n(len*.43)+' '+n(-len*.51)+' 0 0Z" fill="'+green+'" opacity=".92"/><path d="M0 -3 Q-3 '+n(-len*.48)+' 0 '+n(-len*.94)+'" stroke="'+mix(green,'#ffffff',.3)+'" stroke-width="1" fill="none"/></g>';
+    }
+    return { svg, bend, ctrlY, green };
+  }
+
   function gradient(id, color) {
     return '<linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop stop-color="'+mix(color,'#fff9e6',.32)+'"/><stop offset=".48" stop-color="'+color+'"/><stop offset="1" stop-color="'+mix(color,'#592c47',.31)+'"/></linearGradient>';
   }
@@ -115,6 +171,7 @@
   // változat kódja változatlanul; a véletlenszámokat ugyanabban a sorrendben húzza.
   function dahlia(c) {
     const { f, layers, freedom, untamed, rnd, petalRnd, base, uid } = c;
+    const coreRnd = c.coreRnd || rnd; // gen 1-ben ugyanaz a folyam, mint a rétegeké
     let defs = '', svg = '', petals = 0;
     for(let k=0;k<layers;k++) {
       const petalNumber=Math.round(13+(9+Math.floor(rnd()*8)-13)*freedom), r=f.r*(1-k/(layers+1)*.82), width=r*(.1825+(rnd()-.5)*.065*freedom), offset=r*.43;
@@ -128,11 +185,11 @@
         petals++;
       }
     }
-    const coreR=f.r*(.1425+(rnd()-.5)*.025*freedom);
+    const coreR=f.r*(.1425+(coreRnd()-.5)*.025*freedom);
     svg += '<circle r="'+n(coreR)+'" fill="url(#'+uid+'core)"/>';
     for(let p=0;p<52;p++) {
       const angle=p*2.399963229728653, radius=coreR*.91*Math.sqrt(p/52);
-      svg += '<circle cx="'+n(Math.cos(angle)*radius)+'" cy="'+n(Math.sin(angle)*radius)+'" r="'+n(1.5+(rnd()-.5)*.7*freedom)+'" fill="'+(p%3===0?'#765835':'#edca7f')+'" opacity=".85"/>';
+      svg += '<circle cx="'+n(Math.cos(angle)*radius)+'" cy="'+n(Math.sin(angle)*radius)+'" r="'+n(1.5+(coreRnd()-.5)*.7*freedom)+'" fill="'+(p%3===0?'#765835':'#edca7f')+'" opacity=".85"/>';
     }
     return { defs, svg, petals };
   }
@@ -326,42 +383,41 @@
     const controlledIndex = (baseline, sampled) => Math.round(baseline+(sampled-baseline)*Math.min(freedom,1));
     const paletteName = Object.hasOwn(palettes,options.palette) ? options.palette : 'dusk';
     const flowerCodes = normalizeFlowers(options.flowers === undefined || options.flowers === null ? 'd' : String(options.flowers));
-    const palette = palettes[paletteName], rnd = random(seed), flowers = layout(count,rnd,freedom);
-    const kinds = assignTypes(flowerCodes, count, seed);
+    const independent = Number(options.gen) >= 2;
+    const palette = palettes[paletteName], rnd = random(independent ? hash32(seed, 0, SALT.layout) : seed), flowers = layout(count,rnd,freedom);
+    const kinds = independent ? assignTypesStable(flowerCodes, seed).slice(0, count) : assignTypes(flowerCodes, count, seed);
+    const colors = [];
     let defs = '<radialGradient id="paper"><stop stop-color="#fffdf4"/><stop offset="1" stop-color="'+palette.background+'"/></radialGradient><radialGradient id="core"><stop stop-color="#edc16e"/><stop offset=".6" stop-color="#c59b57"/><stop offset="1" stop-color="#82693c"/></radialGradient>';
     let stems = '', blooms = '', totalPetals = 0;
     for (const f of flowers) {
       const kind = kinds[f.index];
-      const rootX = 449+(f.x-450)*.19, rootY = 806+(rnd()-.5)*33*freedom;
-      const bend = f.x+(450-f.x)*.42+(rnd()-.5)*30*freedom;
-      // A kontrollpont nem kerülhet a szár töve alá, különben a szár lelóg és visszakunkorodik.
-      const ctrlY = Math.min(f.y+230, rootY-40);
-      const green = palette.leaves[controlledIndex(f.index%palette.leaves.length,Math.floor(rnd()*palette.leaves.length))];
-      stems += '<path d="M'+n(rootX)+' '+n(rootY)+' Q'+n(bend)+' '+n(ctrlY)+' '+n(f.x)+' '+n(f.y)+'" fill="none" stroke="'+green+'" stroke-width="'+n(5.5+(rnd()-.5)*3*freedom)+'" stroke-linecap="round"/>';
-      for(let l=0;l<3;l++) {
-        const t=.45+l*.14, u=1-t;
-        const lx=u*u*rootX+2*u*t*bend+t*t*f.x, ly=u*u*rootY+2*u*t*ctrlY+t*t*f.y;
-        const direction=(l+f.index)%2 ? -1 : 1;
-        const len=87.5+(rnd()-.5)*45*freedom, angle=direction*(42.5+(rnd()-.5)*25*freedom);
-        stems += '<g transform="translate('+n(lx)+' '+n(ly)+') rotate('+n(angle)+')"><path d="M0 0 Q'+n(-len*.49)+' '+n(-len*.58)+' 0 '+n(-len)+' Q'+n(len*.43)+' '+n(-len*.51)+' 0 0Z" fill="'+green+'" opacity=".92"/><path d="M0 -3 Q-3 '+n(-len*.48)+' 0 '+n(-len*.94)+'" stroke="'+mix(green,'#ffffff',.3)+'" stroke-width="1" fill="none"/></g>';
-      }
-      const baseColor = palette.petals[controlledIndex(f.index%palette.petals.length,Math.floor(rnd()*palette.petals.length))];
-      let head;
+      // gen 2-ben minden szerep saját folyamot kap; gen 1-ben minden a közös rnd-ből jön.
+      const own = salt => random(hash32(seed, f.index, salt));
+      const s = stem(f, independent ? own(SALT.stem) : rnd, freedom, palette, controlledIndex);
+      stems += s.svg;
+      const colorRnd = independent ? own(SALT.color) : rnd;
+      const baseColor = palette.petals[controlledIndex(f.index%palette.petals.length,Math.floor(colorRnd()*palette.petals.length))];
+      let head, base = baseColor;
       if (kind === 'd') {
-        const petalRnd = random((seed ^ Math.imul(f.index+1,0x9E3779B9))>>>0);
-        head = dahlia({ f, layers, freedom, untamed, rnd, petalRnd, base: baseColor, uid: '' });
+        const petalRnd = independent ? own(SALT.petal) : random((seed ^ Math.imul(f.index+1,0x9E3779B9))>>>0);
+        head = dahlia({ f, layers, freedom, untamed, rnd: independent ? own(SALT.head) : rnd, coreRnd: independent ? own(SALT.core) : rnd, petalRnd, base, uid: '' });
       } else {
-        // A közös véletlenfolyamból annyit lépünk, amennyit egy dália fogyasztana,
-        // így a fajta cseréje nem rendezi át a többi virág helyét, szárát és színét.
-        for (let s = 0; s < layers*2+53; s++) rnd();
-        const headRnd = random((seed ^ Math.imul(f.index+1,0x85EBCA6B) ^ 0x27D4EB2F)>>>0);
-        const lean = Math.atan2(f.x-bend, ctrlY-f.y)*180/Math.PI;
+        let headRnd;
+        if (independent) headRnd = own(SALT.head);
+        else {
+          // gen 1: a közös folyamból annyit lépünk, amennyit egy dália fogyasztana,
+          // így a fajta cseréje nem rendezi át a többi virág helyét, szárát és színét.
+          for (let k = 0; k < layers*2+53; k++) rnd();
+          headRnd = random((seed ^ Math.imul(f.index+1,0x85EBCA6B) ^ 0x27D4EB2F)>>>0);
+        }
+        const lean = Math.atan2(f.x-s.bend, s.ctrlY-f.y)*180/Math.PI;
         // A napraforgó és a levendula a színéről ismerős: a palettából a jellemző
         // színéhez közelit kapja (napraforgónál a két legközelebbi egyikét).
-        const base = kind === 'n' ? nearest(palette.petals, TYPE_HUE.n, freedom > 0 ? Math.floor(headRnd()*2) : 0)
-          : kind === 'l' ? nearest(palette.petals, TYPE_HUE.l, 0) : baseColor;
-        head = HEADS[kind]({ r: f.r*TYPE_SCALE[kind], index: f.index, rotation: f.rotation, layers, freedom, calm, untamed, rnd: headRnd, base, green, lean, uid: '' });
+        if (kind === 'n') base = nearest(palette.petals, TYPE_HUE.n, freedom > 0 ? Math.floor(headRnd()*2) : 0);
+        else if (kind === 'l') base = nearest(palette.petals, TYPE_HUE.l, 0);
+        head = HEADS[kind]({ r: f.r*TYPE_SCALE[kind], index: f.index, rotation: f.rotation, layers, freedom, calm, untamed, rnd: headRnd, base, green: s.green, lean, uid: '' });
       }
+      colors.push(base);
       defs += head.defs;
       totalPetals += head.petals;
       blooms += '<g transform="translate('+n(f.x)+' '+n(f.y)+')"><g class="flower-petals" style="animation-delay:'+n(f.index*.09)+'s">'+head.svg+'</g></g>';
@@ -369,7 +425,7 @@
     const lady=flowers[flowers.length-1];
     const ladybug='<g transform="translate('+n(lady.x+(450-lady.x)*.28)+' '+n(lady.y+118)+') rotate(-28)"><ellipse rx="8" ry="11" fill="#98412f"/><path d="M0 -8V10" stroke="#373a2c" stroke-width="1.2"/><circle cy="-9" r="4" fill="#373a2c"/><circle cx="-4" cy="-2" r="1.6" fill="#373a2c"/><circle cx="4" cy="3" r="1.7" fill="#373a2c"/><circle cx="-3" cy="5" r="1.3" fill="#373a2c"/></g>';
     const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" width="900" height="900" aria-hidden="true"><defs>'+defs+'</defs><rect width="900" height="900" fill="url(#paper)"/><g fill="none" stroke="#95a087" stroke-opacity=".1"><circle cx="450" cy="430" r="329"/><circle cx="450" cy="430" r="290"/><path d="M90 430h720M450 90v680" stroke-dasharray="2 9"/></g><ellipse cx="450" cy="830" rx="152" ry="18" fill="#64784f" opacity=".07"/>'+stems+'<path d="M416 770q35 14 70-3M416 780q34 12 70-2" fill="none" stroke="#b5a383" stroke-width="3" stroke-linecap="round"/>'+blooms+ladybug+'</svg>';
-    return {svg, seed, count, layers, variation, palette:paletteName, flowers:flowerCodes, kinds, totalPetals, background:palette.background};
+    return {svg, seed, count, layers, variation, palette:paletteName, flowers:flowerCodes, gen: independent ? 2 : 1, kinds, colors, totalPetals, background:palette.background};
   }
 
   // Egyetlen virágfej kis előnézethez (a fajtaválasztó gombjaihoz). Saját ID-előtagot használ.

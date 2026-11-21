@@ -1,0 +1,195 @@
+/*
+ * MathBloom fordítások, v5
+ *
+ * A magyar szöveg az index.html-ben van, az az alapértelmezett. Ebben a fájlban
+ * két dolog áll:
+ *  - en: az index.html data-i18n / data-i18n-html / data-i18n-attr kulcsainak
+ *    angol szövege (data-i18n-html esetén HTML-részlet);
+ *  - dyn: a program által összerakott szövegek (kiírások, üzenetek, képeslap)
+ *    mindkét nyelven.
+ * Ha az index.html magyar szövegén változtatsz, itt az angolt is írd át.
+ */
+(function (root) {
+  'use strict';
+
+  const en = {
+    'brand.home': 'MathBloom home',
+    'nav.label': 'Main menu',
+    'nav.studio': 'Studio',
+    'nav.behind': 'Behind the petals',
+    'header.note': '<span class="tiny-star">✳</span> From mathematics, with love',
+
+    'intro.eyebrow': 'A LITTLE MATH. A BIG SMILE.',
+    'intro.title': 'A flower<br>just for <em>them</em>.',
+    'intro.lead': 'A few curves, a pinch of chance<br class="desktop-break"> and something truly personal.',
+    'intro.sub': 'Grow your own bouquet, add a few kind words, and send it to whoever came to mind.',
+    'intro.cta': 'Let it bloom <span aria-hidden="true">↘</span>',
+
+    'studio.label': 'Flower studio',
+    'art.label': '<i></i> YOUR LITTLE MATHEMATICAL GARDEN',
+    'art.replay': 'Replay the bloom',
+    'art.replayTitle': 'Bloom again',
+    'art.footer': 'Born from curves. For you.',
+
+    'controls.eyebrow': '01 / YOUR CREATION',
+    'controls.title': 'A little joy,<br><em>just the way you like it.</em>',
+    'types.legend': 'Which flowers should bloom? <span class="optional">(pick as many as you like)</span>',
+    'type.d': 'Dahlia',
+    'type.m': 'Daisy',
+    'type.r': 'Rose',
+    'type.p': 'Poppy',
+    'type.t': 'Tulip',
+    'type.n': 'Sunflower',
+    'type.l': 'Lavender',
+    'palette.legend': 'Palette',
+    'palette.dusk': 'Dusk',
+    'palette.sunshine': 'Sunshine',
+    'palette.wildflower': 'Wildflower',
+    'palette.rosegarden': 'Rose garden',
+    'palette.sea': 'Sea',
+    'palette.autumn': 'Autumn',
+    'count.label': 'How many flowers?',
+    'count.min': 'A single stem',
+    'count.max': 'A whole bouquet',
+    'layers.label': 'Petal layers',
+    'variation.label': 'Variation',
+    'variation.min': 'Orderly',
+    'variation.max': 'Free-blooming',
+    'variation.help': 'How strongly chance shapes the bouquet. At 0%, every new bouquet comes out the same.',
+    'personal.eyebrow': '02 / MAKE IT PERSONAL',
+    'recipient.label': 'Who is it for?',
+    'recipient.placeholder': 'For example: Anna',
+    'occasion.label': 'What’s the occasion?',
+    'occasion.just': 'Just because ☺',
+    'occasion.birthday': 'Birthday',
+    'occasion.thanks': 'Thank you',
+    'occasion.love': 'With love',
+    'occasion.cheer': 'A little encouragement',
+    'message.label': 'A few kind words <span class="optional">(optional)</span>',
+    'btn.generate': 'Grow a new bouquet',
+    'btn.download': 'Download image',
+    'btn.share': 'Send it',
+    'controls.footnote': '<span aria-hidden="true">✧</span> Chance creates. You give it meaning.',
+    'studio.note': '<span aria-hidden="true">↳</span> Every new bouquet is a new combination. Your link brings back the very same one.',
+    'gift.create': 'Grow a flower of your own <span aria-hidden="true">↗</span>',
+
+    'behind.eyebrow': 'BEHIND THE PETALS',
+    'behind.title': 'Equations.<br><em>Emotions.</em>',
+    'behind.text': 'Beauty sometimes starts with a simple curve. MathBloom’s flowers grow from rotated ellipses: layers, proportions and colours come together anew in every bouquet.',
+    'card1.title': '01 — ANATOMY OF A PETAL',
+    'card1.diagram': 'An ellipse shifted a distance d from the centre, then rotated by α; every other petal is a rotated copy of it',
+    'card1.semiaxes': ' — semi-axes',
+    'card1.offset': ' — offset',
+    'card1.rotation': ' — rotation',
+    'card1.note': 'One shifted ellipse, turned around the centre N times. If d < a, the petals overlap in the middle, where the flower’s centre covers them.',
+    'card2.title': '02 — THE CENTRE: THE GOLDEN ANGLE',
+    'card2.diagram': 'Vogel spiral: dots turned by the golden angle, at a distance proportional to the square root of their index; every 13th and every 21st dot is highlighted, tracing two spirals that wind in opposite directions',
+    'card2.every13': 'every 13th',
+    'card2.every21': 'every 21st',
+    'card2.formula': 'θ = n · 137.508°&nbsp;&nbsp;&nbsp; r = c · √n',
+    'card2.sub': '137.508° = 360° · (2 − φ),&nbsp;&nbsp; φ = (1 + √5) / 2',
+    'card2.note': 'The n-th dot of the flower’s centre. The √n keeps the density even, and the spirals known from sunflowers appear.',
+    'step1.title': 'The curve',
+    'step1.text': 'One ellipse sets the petal’s shape and proportions.',
+    'step2.title': 'The kinds',
+    'step2.text': 'Seven flowers, one curve. The daisy lays the ellipse out in a circle, the rose along a golden-angle spiral, the tulip turns it around a shared base, and in lavender it shrinks along a geometric sequence.',
+    'step3.title': 'Chance',
+    'step3.text': 'Rotations, new colours and subtly varied sizes bring it to life.',
+    'step4.title': 'The message',
+    'step4.text': 'You decide who this bouquet blooms for, and why.',
+    'source.link': 'The original MATLAB code <span aria-hidden="true">↓</span>',
+    'source.note': 'The web version draws in JavaScript; the petals follow the ellipses of the original code.',
+
+    'footer.text': 'Mathematics has a gentle side too.',
+    'footer.motto': 'Create. Smile. Pass it on.',
+    'counter.title': 'Anonymous browser sessions. Reloads don’t count as new visits when session storage is available.',
+
+    'share.close': 'Close sharing',
+    'share.eyebrow': 'A LITTLE JOY, READY TO GO',
+    'share.title': 'Send a <em>smile.</em>',
+    'share.text': 'You can send the downloaded card to anyone. The link opens the same bouquet and message.',
+    'share.download': 'Download the card ↓',
+    'share.linkLabel': 'Your flower’s link',
+    'share.native': 'Share the link with another app ↗',
+    'share.privacy': 'The recipient and the message live in the part of the link after the #: anyone with the link can read them, but they never reach the website’s server.'
+  };
+
+  const dyn = {
+    hu: {
+      docTitle: 'MathBloom · Matematikából, szeretettel',
+      docDescription: 'Alkoss egy személyes, matematikából születő virágcsokrot. Válassz virágokat és színeket, írj hozzá üzenetet, és küldj egy kis örömöt.',
+      count: n => n + ' virág',
+      layers: n => n + ' réteg',
+      variation: ['Szabályos', 'Finom', 'Természetes', 'Szabad'],
+      petalLine: (petals, count) => petals + ' szirom · ' + count + ' virág · egy személyes üzenet',
+      describe: (count, kinds, layers, palette, variation) => count + ' virág (' + kinds + '), ' + layers + ' réteg, ' + palette + ' színekben, ' + variation + ' százalék változatossággal.',
+      flowers: { d: 'dália', m: 'margaréta', r: 'rózsa', p: 'pipacs', t: 'tulipán', n: 'napraforgó', l: 'levendula' },
+      palettes: { dusk: 'rózsaszín és lila', sunshine: 'meleg sárga és narancs', wildflower: 'kék és korall', rosegarden: 'piros és rózsaszín', sea: 'kék és türkiz', autumn: 'rozsda és mustár' },
+      occasions: {
+        just: 'Ez a virág most csak neked nyílt. ♡',
+        birthday: 'Boldog születésnapot! Legyen virágzó éved. ♡',
+        thanks: 'Köszönöm. Egy kis virág, egy nagy mosoly. ♡',
+        love: 'Szeretettel, csak neked. ♡',
+        cheer: 'Egy kis öröm neked. A szürke napokon is nyílnak virágok. ♡'
+      },
+      giftTo: to => to ? to + ', neked.' : 'Egy kis öröm, neked.',
+      giftHeadline: to => to ? to + ',' : 'Egy kis öröm,',
+      giftHeadlineEm: 'csak neked.',
+      giftEyebrow: 'VALAKI GONDOLT RÁD. ♡',
+      giftDocTitle: to => (to ? to + ', egy' : 'Egy') + ' virág neked · MathBloom',
+      cardFooter: 'MathBloom · Matematikából, szeretettel',
+      shareTitle: 'MathBloom · Egy virág neked',
+      copy: 'Másolás',
+      copied: 'Másolva ✓',
+      toastKeepOne: 'Legalább egy virágfajta maradjon a csokorban.',
+      toastZero: '0%-nál minden csokor szabályos. Emeld a változatosságot egy új változathoz.',
+      toastNew: 'Megszületett az új csokrod. ☺',
+      toastCardReady: 'Elkészült a virágos képeslapod.',
+      toastCardFailed: 'A kép mentése nem sikerült. Próbáld újra, vagy küldd el a linket.',
+      toastCopied: 'A virágod linkje a vágólapra került.',
+      toastCopyByHand: 'Jelöld ki és másold ki a linket kézzel.',
+      toastUseCopy: 'Használd a link másolását a megosztáshoz.',
+      counterLabel: 'Látogatások',
+      counterUnavailable: 'nem elérhető'
+    },
+    en: {
+      docTitle: 'MathBloom · From mathematics, with love',
+      docDescription: 'Grow a personal bouquet out of mathematics. Pick flowers and colours, add a message, and send a little joy.',
+      count: n => n + (n === 1 ? ' flower' : ' flowers'),
+      layers: n => n + (n === 1 ? ' layer' : ' layers'),
+      variation: ['Regular', 'Subtle', 'Natural', 'Free'],
+      petalLine: (petals, count) => petals + ' petals · ' + count + (count === 1 ? ' flower' : ' flowers') + ' · one personal message',
+      describe: (count, kinds, layers, palette, variation) => count + (count === 1 ? ' flower' : ' flowers') + ' (' + kinds + '), ' + layers + ' layers, in ' + palette + ', with ' + variation + ' percent variation.',
+      flowers: { d: 'dahlia', m: 'daisy', r: 'rose', p: 'poppy', t: 'tulip', n: 'sunflower', l: 'lavender' },
+      palettes: { dusk: 'pink and lilac', sunshine: 'warm yellow and orange', wildflower: 'blue and coral', rosegarden: 'red and pink', sea: 'blue and turquoise', autumn: 'rust and mustard' },
+      occasions: {
+        just: 'This flower bloomed just for you. ♡',
+        birthday: 'Happy birthday! May your year be in full bloom. ♡',
+        thanks: 'Thank you. A little flower, a big smile. ♡',
+        love: 'With love, just for you. ♡',
+        cheer: 'A little joy for you. Flowers bloom on grey days too. ♡'
+      },
+      giftTo: to => to ? 'For ' + to + '.' : 'A little joy, for you.',
+      giftHeadline: to => to ? to + ',' : 'A little joy,',
+      giftHeadlineEm: 'just for you.',
+      giftEyebrow: 'SOMEONE THOUGHT OF YOU. ♡',
+      giftDocTitle: to => 'A flower for ' + (to || 'you') + ' · MathBloom',
+      cardFooter: 'MathBloom · From mathematics, with love',
+      shareTitle: 'MathBloom · A flower for you',
+      copy: 'Copy',
+      copied: 'Copied ✓',
+      toastKeepOne: 'Keep at least one kind of flower in the bouquet.',
+      toastZero: 'At 0% every bouquet is perfectly regular. Raise the variation to get a new one.',
+      toastNew: 'Your new bouquet has bloomed. ☺',
+      toastCardReady: 'Your flower card is ready.',
+      toastCardFailed: 'The image could not be saved. Try again, or send the link instead.',
+      toastCopied: 'Your flower’s link is on the clipboard.',
+      toastCopyByHand: 'Select the link and copy it by hand.',
+      toastUseCopy: 'Use the Copy button to share the link.',
+      counterLabel: 'Visits',
+      counterUnavailable: 'unavailable'
+    }
+  };
+
+  root.MathBloomI18n = { en, dyn, languages: ['hu', 'en'] };
+})(typeof globalThis !== 'undefined' ? globalThis : this);

@@ -6,125 +6,135 @@
   <meta name="theme-color" content="#f8f5ee">
   <meta name="description" content="Alkoss egy személyes, matematikából születő virágcsokrot. Válassz virágokat és színeket, írj hozzá üzenetet, és küldj egy kis örömöt.">
   <title>MathBloom · Matematikából, szeretettel</title>
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=3">
-  <script src="bloom-engine.js?v=3" defer></script>
-  <script src="app.js?v=3" defer></script>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css?v=5">
+  <script src="bloom-engine.js?v=5" defer></script>
+  <script src="i18n.js?v=5" defer></script>
+  <script src="app.js?v=5" defer></script>
   <script src="counter-config.js" defer></script>
   <script src="visits.js" defer></script>
 </head>
 <body>
   <header class="site-header">
-    <a href="./" class="brand" aria-label="MathBloom kezdőlap"><svg viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="20" cy="20" rx="6" ry="17"/><ellipse cx="20" cy="20" rx="6" ry="17" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="6" ry="17" transform="rotate(120 20 20)"/><circle cx="20" cy="20" r="3" fill="currentColor"/></g></svg><span>MathBloom<span class="brand-dot">.</span></span></a>
-    <nav aria-label="Főmenü"><a href="#studio">Alkotóműhely</a><a href="#how">A szirmok mögött</a></nav>
-    <span class="header-note"><span class="tiny-star">✳</span> Matematikából, szeretettel</span>
+    <a href="./" class="brand" aria-label="MathBloom kezdőlap" data-i18n-attr="aria-label:brand.home"><svg viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="20" cy="20" rx="6" ry="17"/><ellipse cx="20" cy="20" rx="6" ry="17" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="6" ry="17" transform="rotate(120 20 20)"/><circle cx="20" cy="20" r="3" fill="currentColor"/></g></svg><span>MathBloom<span class="brand-dot">.</span></span></a>
+    <nav aria-label="Főmenü" data-i18n-attr="aria-label:nav.label"><a href="#studio" data-i18n="nav.studio">Alkotóműhely</a><a href="#how" data-i18n="nav.behind">A szirmok mögött</a></nav>
+    <div class="header-tools">
+      <span class="header-note" data-i18n-html="header.note"><span class="tiny-star">✳</span> Matematikából, szeretettel</span>
+      <!-- Nyelvváltó: a bordó gomb átcsúszik, a kis virág megpördül, váltáskor szirmok pattannak szét -->
+      <div class="lang-switch" id="lang-switch" role="group" aria-label="Nyelv · Language" data-lang="hu">
+        <span class="lang-knob" aria-hidden="true"></span>
+        <button type="button" data-lang="hu" lang="hu" aria-pressed="true" aria-label="HU · magyar" title="Magyar"><svg viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3.2"><ellipse cx="20" cy="20" rx="6.5" ry="16"/><ellipse cx="20" cy="20" rx="6.5" ry="16" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="6.5" ry="16" transform="rotate(120 20 20)"/></g><circle cx="20" cy="20" r="4.2" fill="currentColor"/></svg><span>HU</span></button>
+        <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="EN · English" title="English"><svg viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3.2"><ellipse cx="20" cy="20" rx="6.5" ry="16"/><ellipse cx="20" cy="20" rx="6.5" ry="16" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="6.5" ry="16" transform="rotate(120 20 20)"/></g><circle cx="20" cy="20" r="4.2" fill="currentColor"/></svg><span>EN</span></button>
+        <span class="lang-burst" aria-hidden="true"><i style="--a:0deg;--c:#743d55"></i><i style="--a:45deg;--c:#de97ae"></i><i style="--a:90deg;--c:#c59b57"></i><i style="--a:135deg;--c:#87955d"></i><i style="--a:180deg;--c:#a46fbb"></i><i style="--a:225deg;--c:#efb5a9"></i><i style="--a:270deg;--c:#743d55"></i><i style="--a:315deg;--c:#c59b57"></i></span>
+      </div>
+    </div>
   </header>
 
   <main>
     <section class="intro" aria-labelledby="page-title">
       <div>
-        <p class="eyebrow"><span class="small-line"></span> EGY KIS MATEMATIKA. EGY NAGY MOSOLY.</p>
-        <h1 id="page-title">Virág, ami csak<br><em>neki</em> nyílik.</h1>
+        <p class="eyebrow"><span class="small-line"></span> <span id="intro-eyebrow" data-i18n="intro.eyebrow">EGY KIS MATEMATIKA. EGY NAGY MOSOLY.</span></p>
+        <h1 id="page-title" data-i18n-html="intro.title">Virág, ami csak<br><em>neki</em> nyílik.</h1>
       </div>
       <div class="intro-copy">
-        <p>Néhány görbe, egy csipet véletlen<br class="desktop-break"> és valami egészen személyes.</p>
-        <p class="intro-sub">Alkoss egy saját virágcsokrot, írj hozzá pár kedves szót, és küldd el annak, aki eszedbe jutott.</p>
-        <a href="#studio" class="text-link">Hadd virágozzon <span aria-hidden="true">↘</span></a>
+        <p data-i18n-html="intro.lead">Néhány görbe, egy csipet véletlen<br class="desktop-break"> és valami egészen személyes.</p>
+        <p class="intro-sub" data-i18n="intro.sub">Alkoss egy saját virágcsokrot, írj hozzá pár kedves szót, és küldd el annak, aki eszedbe jutott.</p>
+        <a href="#studio" class="text-link" data-i18n-html="intro.cta">Hadd virágozzon <span aria-hidden="true">↘</span></a>
       </div>
       <svg class="intro-decoration" viewBox="0 0 100 100" fill="none" aria-hidden="true"><path d="M50 8c-15 22-15 62 0 84M8 50c22-15 62-15 84 0M20 20c27 4 56 33 60 60M20 80c4-27 33-56 60-60" stroke="currentColor" stroke-width="1"/><circle cx="50" cy="50" r="29" stroke="currentColor"/></svg>
     </section>
 
-    <section id="studio" class="studio" aria-label="Virág alkotóműhely">
+    <section id="studio" class="studio" aria-label="Virág alkotóműhely" data-i18n-attr="aria-label:studio.label">
       <div class="art-panel">
         <div class="art-sticky">
           <div class="art-top">
-            <span class="art-label"><i></i> A TE KIS MATEMATIKAI KERTED</span>
-            <button class="icon-button replay-button" id="replay" aria-label="A virágnyílás újrajátszása" title="Nyíljon újra"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button>
+            <span class="art-label" data-i18n-html="art.label"><i></i> A TE KIS MATEMATIKAI KERTED</span>
+            <button class="icon-button replay-button" id="replay" aria-label="A virágnyílás újrajátszása" title="Nyíljon újra" data-i18n-attr="aria-label:art.replay;title:art.replayTitle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button>
           </div>
           <div class="artboard" id="artboard" role="img" aria-label="Rétegzett elliptikus szirmokból rajzolt virágcsokor"></div>
           <div class="gift-caption" id="gift-caption" hidden><p class="gift-to" id="gift-to"></p><p class="gift-message" id="gift-message"></p></div>
-          <div class="art-bottom"><span id="seed-label">MB–00001CA</span><span>Görbékből született. Neked.</span><span aria-hidden="true">✳</span></div>
+          <div class="art-bottom"><span id="seed-label">MB–00001GT</span><span data-i18n="art.footer">Görbékből született. Neked.</span><span aria-hidden="true">✳</span></div>
         </div>
       </div>
 
       <aside class="controls" aria-labelledby="controls-title">
-        <p class="eyebrow control-eyebrow">01 / A TE ALKOTÁSOD</p>
-        <h2 id="controls-title">Egy kis öröm,<br><em>ahogy te szeretnéd.</em></h2>
+        <p class="eyebrow control-eyebrow" data-i18n="controls.eyebrow">01 / A TE ALKOTÁSOD</p>
+        <h2 id="controls-title" data-i18n-html="controls.title">Egy kis öröm,<br><em>ahogy te szeretnéd.</em></h2>
         <form id="bloom-form">
           <fieldset class="type-field">
-            <legend>Milyen virágok nyíljanak? <span class="optional">(többet is választhatsz)</span></legend>
+            <legend data-i18n-html="types.legend">Milyen virágok nyíljanak? <span class="optional">(többet is választhatsz)</span></legend>
             <div class="type-options">
-              <label class="type-choice"><input type="checkbox" name="flower" value="d"><span class="type-icon" data-flower="d"></span><span>Dália</span></label>
-              <label class="type-choice"><input type="checkbox" name="flower" value="m"><span class="type-icon" data-flower="m"></span><span>Margaréta</span></label>
-              <label class="type-choice"><input type="checkbox" name="flower" value="r"><span class="type-icon" data-flower="r"></span><span>Rózsa</span></label>
-              <label class="type-choice"><input type="checkbox" name="flower" value="p"><span class="type-icon" data-flower="p"></span><span>Pipacs</span></label>
-              <label class="type-choice"><input type="checkbox" name="flower" value="t"><span class="type-icon" data-flower="t"></span><span>Tulipán</span></label>
-              <label class="type-choice"><input type="checkbox" name="flower" value="n"><span class="type-icon" data-flower="n"></span><span>Napraforgó</span></label>
-              <label class="type-choice"><input type="checkbox" name="flower" value="l"><span class="type-icon" data-flower="l"></span><span>Levendula</span></label>
+              <label class="type-choice"><input type="checkbox" name="flower" value="d"><span class="type-icon" data-flower="d"></span><span data-i18n="type.d">Dália</span></label>
+              <label class="type-choice"><input type="checkbox" name="flower" value="m"><span class="type-icon" data-flower="m"></span><span data-i18n="type.m">Margaréta</span></label>
+              <label class="type-choice"><input type="checkbox" name="flower" value="r"><span class="type-icon" data-flower="r"></span><span data-i18n="type.r">Rózsa</span></label>
+              <label class="type-choice"><input type="checkbox" name="flower" value="p"><span class="type-icon" data-flower="p"></span><span data-i18n="type.p">Pipacs</span></label>
+              <label class="type-choice"><input type="checkbox" name="flower" value="t"><span class="type-icon" data-flower="t"></span><span data-i18n="type.t">Tulipán</span></label>
+              <label class="type-choice"><input type="checkbox" name="flower" value="n"><span class="type-icon" data-flower="n"></span><span data-i18n="type.n">Napraforgó</span></label>
+              <label class="type-choice"><input type="checkbox" name="flower" value="l"><span class="type-icon" data-flower="l"></span><span data-i18n="type.l">Levendula</span></label>
             </div>
           </fieldset>
 
           <fieldset class="palette-field">
-            <legend>Színvilág</legend>
+            <legend data-i18n="palette.legend">Színvilág</legend>
             <div class="palette-options">
-              <label class="palette-choice"><input type="radio" name="palette" value="dusk" checked><span class="palette-swatch dusk"><i></i><i></i><i></i></span><span>Alkonyat</span></label>
-              <label class="palette-choice"><input type="radio" name="palette" value="sunshine"><span class="palette-swatch sunshine"><i></i><i></i><i></i></span><span>Napsugár</span></label>
-              <label class="palette-choice"><input type="radio" name="palette" value="wildflower"><span class="palette-swatch wildflower"><i></i><i></i><i></i></span><span>Vadvirág</span></label>
-              <label class="palette-choice"><input type="radio" name="palette" value="rosegarden"><span class="palette-swatch rosegarden"><i></i><i></i><i></i></span><span>Rózsakert</span></label>
-              <label class="palette-choice"><input type="radio" name="palette" value="sea"><span class="palette-swatch sea"><i></i><i></i><i></i></span><span>Tenger</span></label>
-              <label class="palette-choice"><input type="radio" name="palette" value="autumn"><span class="palette-swatch autumn"><i></i><i></i><i></i></span><span>Ősz</span></label>
+              <label class="palette-choice"><input type="radio" name="palette" value="dusk" checked><span class="palette-swatch dusk"><i></i><i></i><i></i></span><span data-i18n="palette.dusk">Alkonyat</span></label>
+              <label class="palette-choice"><input type="radio" name="palette" value="sunshine"><span class="palette-swatch sunshine"><i></i><i></i><i></i></span><span data-i18n="palette.sunshine">Napsugár</span></label>
+              <label class="palette-choice"><input type="radio" name="palette" value="wildflower"><span class="palette-swatch wildflower"><i></i><i></i><i></i></span><span data-i18n="palette.wildflower">Vadvirág</span></label>
+              <label class="palette-choice"><input type="radio" name="palette" value="rosegarden"><span class="palette-swatch rosegarden"><i></i><i></i><i></i></span><span data-i18n="palette.rosegarden">Rózsakert</span></label>
+              <label class="palette-choice"><input type="radio" name="palette" value="sea"><span class="palette-swatch sea"><i></i><i></i><i></i></span><span data-i18n="palette.sea">Tenger</span></label>
+              <label class="palette-choice"><input type="radio" name="palette" value="autumn"><span class="palette-swatch autumn"><i></i><i></i><i></i></span><span data-i18n="palette.autumn">Ősz</span></label>
             </div>
           </fieldset>
 
           <div class="range-row">
-            <div class="label-line"><label for="flower-count">Hány virág nyíljon?</label><output id="count-output" for="flower-count">6 virág</output></div>
+            <div class="label-line"><label for="flower-count" data-i18n="count.label">Hány virág nyíljon?</label><output id="count-output" for="flower-count">6 virág</output></div>
             <input type="range" id="flower-count" min="1" max="9" value="6">
-            <div class="range-hints"><span>Egyetlen szál</span><span>Egy egész csokor</span></div>
+            <div class="range-hints"><span data-i18n="count.min">Egyetlen szál</span><span data-i18n="count.max">Egy egész csokor</span></div>
           </div>
           <div class="range-row details-range">
-            <div class="label-line"><label for="layer-count">Szirmok rétegei</label><output id="layers-output" for="layer-count">4 réteg</output></div>
+            <div class="label-line"><label for="layer-count" data-i18n="layers.label">Szirmok rétegei</label><output id="layers-output" for="layer-count">4 réteg</output></div>
             <input type="range" id="layer-count" min="2" max="6" value="4">
           </div>
           <div class="range-row variation-range">
-            <div class="label-line"><label for="variation">Változatosság</label><output id="variation-output" for="variation">50% · Természetes</output></div>
+            <div class="label-line"><label for="variation" data-i18n="variation.label">Változatosság</label><output id="variation-output" for="variation">50% · Természetes</output></div>
             <input type="range" id="variation" min="0" max="100" value="50" aria-describedby="variation-help">
-            <div class="range-hints"><span>Rendezett</span><span>Szabadon nyíló</span></div>
-            <p class="variation-help" id="variation-help">A véletlen eltérések erőssége. 0%-nál az új csokor is ugyanilyen lesz.</p>
+            <div class="range-hints"><span data-i18n="variation.min">Rendezett</span><span data-i18n="variation.max">Szabadon nyíló</span></div>
+            <p class="variation-help" id="variation-help" data-i18n="variation.help">A véletlen eltérések erőssége. 0%-nál az új csokor is ugyanilyen lesz.</p>
           </div>
 
           <div class="personalization">
-            <div class="personal-label"><span class="eyebrow">02 / TEDD SZEMÉLYESSÉ</span><span aria-hidden="true">♡</span></div>
+            <div class="personal-label"><span class="eyebrow" data-i18n="personal.eyebrow">02 / TEDD SZEMÉLYESSÉ</span><span aria-hidden="true">♡</span></div>
             <div class="two-fields">
-              <div><label for="recipient">Kinek nyílik?</label><input id="recipient" type="text" maxlength="60" placeholder="Például: Anna" autocomplete="off"></div>
-              <div><label for="occasion">Milyen alkalomra?</label><select id="occasion"><option value="just">Csak úgy ☺</option><option value="birthday">Születésnapra</option><option value="thanks">Köszönöm</option><option value="love">Szeretettel</option><option value="cheer">Egy kis biztatás</option></select></div>
+              <div><label for="recipient" data-i18n="recipient.label">Kinek nyílik?</label><input id="recipient" type="text" maxlength="60" placeholder="Például: Anna" data-i18n-attr="placeholder:recipient.placeholder" autocomplete="off"></div>
+              <div><label for="occasion" data-i18n="occasion.label">Milyen alkalomra?</label><select id="occasion"><option value="just" data-i18n="occasion.just">Csak úgy ☺</option><option value="birthday" data-i18n="occasion.birthday">Születésnapra</option><option value="thanks" data-i18n="occasion.thanks">Köszönöm</option><option value="love" data-i18n="occasion.love">Szeretettel</option><option value="cheer" data-i18n="occasion.cheer">Egy kis biztatás</option></select></div>
             </div>
-            <label for="message">Pár kedves szó <span class="optional">(ha szeretnél)</span></label>
+            <label for="message" data-i18n-html="message.label">Pár kedves szó <span class="optional">(ha szeretnél)</span></label>
             <textarea id="message" rows="2" maxlength="240" placeholder="Ez a virág most csak neked nyílt. ♡"></textarea>
             <span class="character-count" id="character-count">0 / 240</span>
           </div>
 
-          <button type="button" id="generate" class="button primary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 17 13-13 3 3-13 13-3-3ZM4 4v4M2 6h4M16 15v6M13 18h6"/></svg>Új csokor születik<span aria-hidden="true">↗</span></button>
+          <button type="button" id="generate" class="button primary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 17 13-13 3 3-13 13-3-3ZM4 4v4M2 6h4M16 15v6M13 18h6"/></svg><span data-i18n="btn.generate">Új csokor születik</span><span aria-hidden="true">↗</span></button>
           <div class="action-row">
-            <button type="button" id="download" class="button secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4"/></svg>Kép letöltése</button>
-            <button type="button" id="share" class="button secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 3-7 18-4-7-7-4 18-7Zm-11 11L21 3"/></svg>Küldd el</button>
+            <button type="button" id="download" class="button secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4"/></svg><span data-i18n="btn.download">Kép letöltése</span></button>
+            <button type="button" id="share" class="button secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 3-7 18-4-7-7-4 18-7Zm-11 11L21 3"/></svg><span data-i18n="btn.share">Küldd el</span></button>
           </div>
-          <p class="control-footnote"><span aria-hidden="true">✧</span> A véletlen alkot. Te adsz neki jelentést.</p>
+          <p class="control-footnote" data-i18n-html="controls.footnote"><span aria-hidden="true">✧</span> A véletlen alkot. Te adsz neki jelentést.</p>
         </form>
       </aside>
     </section>
-    <div class="studio-note"><p><span aria-hidden="true">↳</span> Minden új csokor egy új kombináció. A linkeddel ugyanaz nyílik újra.</p><span id="petal-count">Matematikai szirmok, személyes történetek.</span></div>
-    <a class="gift-create button primary" id="gift-create" href="./" hidden>Alkoss te is egy virágot <span aria-hidden="true">↗</span></a>
+    <div class="studio-note"><p data-i18n-html="studio.note"><span aria-hidden="true">↳</span> Minden új csokor egy új kombináció. A linkeddel ugyanaz nyílik újra.</p><span id="petal-count">Matematikai szirmok, személyes történetek.</span></div>
+    <a class="gift-create button primary" id="gift-create" href="./" hidden data-i18n-html="gift.create">Alkoss te is egy virágot <span aria-hidden="true">↗</span></a>
 
     <section class="behind" id="how" aria-labelledby="behind-title">
       <div class="behind-heading">
-        <p class="eyebrow">A SZIRMOK MÖGÖTT</p>
-        <h2 id="behind-title">Egyenletek.<br><em>Érzelmek.</em></h2>
-        <p>A szépség néha egy egyszerű görbével kezdődik. A MathBloom virágai elforgatott ellipszisekből nőnek: a rétegek, arányok és színek minden csokornál újra összeállnak.</p>
+        <p class="eyebrow" data-i18n="behind.eyebrow">A SZIRMOK MÖGÖTT</p>
+        <h2 id="behind-title" data-i18n-html="behind.title">Egyenletek.<br><em>Érzelmek.</em></h2>
+        <p data-i18n="behind.text">A szépség néha egy egyszerű görbével kezdődik. A MathBloom virágai elforgatott ellipszisekből nőnek: a rétegek, arányok és színek minden csokornál újra összeállnak.</p>
       </div>
 
       <div class="formula-card">
-        <div class="formula-top"><span>01 — EGY SZIROM ANATÓMIÁJA</span><span aria-hidden="true">↗</span></div>
-        <svg class="ellipse-diagram" viewBox="0 0 320 170" role="img" aria-label="Egy ellipszis, amelyet d távolságra eltoltunk a középponttól, majd α szöggel elforgattunk; a többi szirom ennek elforgatott másolata">
+        <div class="formula-top"><span data-i18n="card1.title">01 — EGY SZIROM ANATÓMIÁJA</span><span aria-hidden="true">↗</span></div>
+        <svg class="ellipse-diagram" viewBox="0 0 320 170" role="img" aria-label="Egy ellipszis, amelyet d távolságra eltoltunk a középponttól, majd α szöggel elforgattunk; a többi szirom ennek elforgatott másolata" data-i18n-attr="aria-label:card1.diagram">
           <g fill="#dcc7df" fill-opacity=".28" stroke="#b9a3bb" stroke-width=".8">
             <ellipse cx="154" cy="84" rx="46" ry="12.5" transform="rotate(-45 118 84)"/>
             <ellipse cx="154" cy="84" rx="46" ry="12.5" transform="rotate(-90 118 84)"/>
@@ -145,60 +155,60 @@
             <text x="136" y="125">d</text><text x="177" y="125">a</text><text x="160" y="95">b</text><text x="153" y="73">α</text>
           </g>
           <g font-family="Georgia,serif" font-size="10" fill="#6a715e">
-            <text x="226" y="58"><tspan font-style="italic">a, b</tspan> — féltengelyek</text>
-            <text x="226" y="76"><tspan font-style="italic">d</tspan> — eltolás</text>
-            <text x="226" y="94"><tspan font-style="italic">α</tspan> — elforgatás</text>
+            <text x="226" y="58"><tspan font-style="italic">a, b</tspan><tspan data-i18n="card1.semiaxes"> — féltengelyek</tspan></text>
+            <text x="226" y="76"><tspan font-style="italic">d</tspan><tspan data-i18n="card1.offset"> — eltolás</tspan></text>
+            <text x="226" y="94"><tspan font-style="italic">α</tspan><tspan data-i18n="card1.rotation"> — elforgatás</tspan></text>
           </g>
         </svg>
         <p class="formula">x = (d + a cos t) cos α − b sin t sin α<br>y = (d + a cos t) sin α + b sin t cos α</p>
         <p class="formula-sub">α = α₀ + j · 360° / N,&nbsp;&nbsp; j = 0, 1, …, N − 1</p>
-        <p class="formula-note">Egy eltolt ellipszis, N-szer körbeforgatva. Ha d &lt; a, a szirmok középen átfednek; ezt takarja a virág közepe.</p>
+        <p class="formula-note" data-i18n="card1.note">Egy eltolt ellipszis, N-szer körbeforgatva. Ha d &lt; a, a szirmok középen átfednek; ezt takarja a virág közepe.</p>
       </div>
 
       <div class="formula-card">
-        <div class="formula-top"><span>02 — A VIRÁG KÖZEPE: ARANYSZÖG</span><span aria-hidden="true">↗</span></div>
-        <svg class="ellipse-diagram vogel-diagram" id="vogel-diagram" viewBox="0 0 320 170" role="img" aria-label="Vogel-spirál: aranyszöggel elforgatott, a sorszám négyzetgyökével arányos távolságú pöttyök; kiemelve minden 13. és minden 21. pötty, amelyek két ellentétes irányú spirált rajzolnak ki">
+        <div class="formula-top"><span data-i18n="card2.title">02 — A VIRÁG KÖZEPE: ARANYSZÖG</span><span aria-hidden="true">↗</span></div>
+        <svg class="ellipse-diagram vogel-diagram" id="vogel-diagram" viewBox="0 0 320 170" role="img" aria-label="Vogel-spirál: aranyszöggel elforgatott, a sorszám négyzetgyökével arányos távolságú pöttyök; kiemelve minden 13. és minden 21. pötty, amelyek két ellentétes irányú spirált rajzolnak ki" data-i18n-attr="aria-label:card2.diagram">
           <g id="vogel-dots"></g>
           <g font-family="Georgia,serif" font-size="10" fill="#6a715e">
-            <circle cx="232" cy="72" r="3.4" fill="#743d55"/><text x="241" y="75.5">minden 13.</text>
-            <circle cx="232" cy="92" r="3.4" fill="#5f7a4a"/><text x="241" y="95.5">minden 21.</text>
+            <circle cx="232" cy="72" r="3.4" fill="#743d55"/><text x="241" y="75.5" data-i18n="card2.every13">minden 13.</text>
+            <circle cx="232" cy="92" r="3.4" fill="#5f7a4a"/><text x="241" y="95.5" data-i18n="card2.every21">minden 21.</text>
           </g>
         </svg>
-        <p class="formula">θ = n · 137,508°&nbsp;&nbsp;&nbsp; r = c · √n</p>
-        <p class="formula-sub">137,508° = 360° · (2 − φ),&nbsp;&nbsp; φ = (1 + √5) / 2</p>
-        <p class="formula-note">A virágközép n-edik pöttye. A √n miatt egyenletes a sűrűség, és kirajzolódnak a napraforgóból ismert spirálok.</p>
+        <p class="formula" data-i18n-html="card2.formula">θ = n · 137,508°&nbsp;&nbsp;&nbsp; r = c · √n</p>
+        <p class="formula-sub" data-i18n-html="card2.sub">137,508° = 360° · (2 − φ),&nbsp;&nbsp; φ = (1 + √5) / 2</p>
+        <p class="formula-note" data-i18n="card2.note">A virágközép n-edik pöttye. A √n miatt egyenletes a sűrűség, és kirajzolódnak a napraforgóból ismert spirálok.</p>
       </div>
 
       <div class="process">
-        <div><span>01</span><h3>A görbe</h3><p>Egy ellipszis megadja a szirom formáját és arányait.</p></div>
-        <div><span>02</span><h3>A fajták</h3><p>Hét virág, egy görbe. A margaréta körbe rakja az ellipszist, a rózsa aranyszög-spirálon, a tulipán egy közös tő körül forgatja, a levendulában pedig mértani sorozat szerint egyre kisebb.</p></div>
-        <div><span>03</span><h3>A véletlen</h3><p>Elforgatások, új színek és finoman eltérő méretek teszik élővé.</p></div>
-        <div><span>04</span><h3>Az üzenet</h3><p>Te döntöd el, kinek és miért nyíljon ez a csokor.</p></div>
-        <div class="source-row"><a class="source-link" id="source-link" href="assets/mathbloom-original.m" download hidden>Az eredeti MATLAB-kód <span aria-hidden="true">↓</span></a><p class="source-note">A webes változat JavaScriptben rajzol; a szirmok az eredeti kód ellipsziseire épülnek.</p></div>
+        <div><span>01</span><h3 data-i18n="step1.title">A görbe</h3><p data-i18n="step1.text">Egy ellipszis megadja a szirom formáját és arányait.</p></div>
+        <div><span>02</span><h3 data-i18n="step2.title">A fajták</h3><p data-i18n="step2.text">Hét virág, egy görbe. A margaréta körbe rakja az ellipszist, a rózsa aranyszög-spirálon, a tulipán egy közös tő körül forgatja, a levendulában pedig mértani sorozat szerint egyre kisebb.</p></div>
+        <div><span>03</span><h3 data-i18n="step3.title">A véletlen</h3><p data-i18n="step3.text">Elforgatások, új színek és finoman eltérő méretek teszik élővé.</p></div>
+        <div><span>04</span><h3 data-i18n="step4.title">Az üzenet</h3><p data-i18n="step4.text">Te döntöd el, kinek és miért nyíljon ez a csokor.</p></div>
+        <div class="source-row"><a class="source-link" id="source-link" href="mathbloom-original.m" download hidden data-i18n-html="source.link">Az eredeti MATLAB-kód <span aria-hidden="true">↓</span></a><p class="source-note" data-i18n="source.note">A webes változat JavaScriptben rajzol; a szirmok az eredeti kód ellipsziseire épülnek.</p></div>
       </div>
     </section>
   </main>
 
   <footer>
     <a class="footer-brand" href="./">MathBloom.</a>
-    <p>A matematikának is van egy gyengéd oldala.</p>
-    <span>Alkoss. Mosolyogj. Küldd tovább.</span>
-    <div class="visit-counter" title="Névtelen böngészős munkamenetek. A frissítések nem számítanak új látogatásnak, ha a munkamenettároló elérhető."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg><output id="visit-count" aria-live="polite" aria-atomic="true">Látogatások: …</output></div>
+    <p data-i18n="footer.text">A matematikának is van egy gyengéd oldala.</p>
+    <span data-i18n="footer.motto">Alkoss. Mosolyogj. Küldd tovább.</span>
+    <div class="visit-counter" title="Névtelen böngészős munkamenetek. A frissítések nem számítanak új látogatásnak, ha a munkamenettároló elérhető." data-i18n-attr="title:counter.title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg><output id="visit-count" aria-live="polite" aria-atomic="true">Látogatások: …</output></div>
   </footer>
 
   <dialog id="share-dialog" aria-labelledby="share-title">
-    <button class="icon-button close-dialog" id="close-share" aria-label="A megosztás bezárása">×</button>
+    <button class="icon-button close-dialog" id="close-share" aria-label="A megosztás bezárása" data-i18n-attr="aria-label:share.close">×</button>
     <span class="dialog-flower" aria-hidden="true">✳</span>
-    <p class="eyebrow">EGY KIS ÖRÖM, ÚTRA KÉSZEN</p>
-    <h2 id="share-title">Küldj egy <em>mosolyt.</em></h2>
-    <p>A letöltött képeslapot bárkinek elküldheted. A link ugyanazt a csokrot és üzenetet nyitja meg.</p>
-    <button class="button primary share-download" id="share-download">Képeslap letöltése ↓</button>
-    <label for="share-url">A virágod linkje</label>
+    <p class="eyebrow" data-i18n="share.eyebrow">EGY KIS ÖRÖM, ÚTRA KÉSZEN</p>
+    <h2 id="share-title" data-i18n-html="share.title">Küldj egy <em>mosolyt.</em></h2>
+    <p data-i18n="share.text">A letöltött képeslapot bárkinek elküldheted. A link ugyanazt a csokrot és üzenetet nyitja meg.</p>
+    <button class="button primary share-download" id="share-download" data-i18n="share.download">Képeslap letöltése ↓</button>
+    <label for="share-url" data-i18n="share.linkLabel">A virágod linkje</label>
     <div class="copy-row"><input id="share-url" type="text" readonly><button class="button primary" id="copy-link">Másolás</button></div>
-    <button class="button secondary native-share" id="native-share" hidden>Link megosztása másik alkalmazással ↗</button>
-    <p class="share-privacy">A címzett és az üzenet a link # utáni részében van: a link birtokosa elolvashatja, de a honlap szerveréhez nem jut el.</p>
+    <button class="button secondary native-share" id="native-share" hidden data-i18n="share.native">Link megosztása másik alkalmazással ↗</button>
+    <p class="share-privacy" data-i18n="share.privacy">A címzett és az üzenet a link # utáni részében van: a link birtokosa elolvashatja, de a honlap szerveréhez nem jut el.</p>
   </dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <noscript><p class="noscript">A virággenerátorhoz engedélyezd a JavaScriptet a böngészőben.</p></noscript>
+  <noscript><p class="noscript">A virággenerátorhoz engedélyezd a JavaScriptet a böngészőben. · Please enable JavaScript to grow your flowers.</p></noscript>
 </body>
 </html>
