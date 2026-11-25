@@ -1,4 +1,4 @@
-/* MathBloom felület, v5 */
+/* MathBloom felület, v7 */
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
@@ -59,7 +59,7 @@
   };
   const state = {
     seed: clamp(query.get('seed'), 0, 4294967295, 1901) >>> 0,
-    count: clamp(query.get('count'), 1, 9, 6),
+    count: clamp(query.get('count'), 1, 18, 6),
     layers: clamp(query.get('layers'), 2, 6, 4),
     variation: clamp(query.get('variation'), 0, 100, 50),
     palette: Object.hasOwn(Engine.palettes, query.get('palette')) ? query.get('palette') : 'dusk',
@@ -109,8 +109,16 @@
     caption();
   }
 
+  // Csúszkahúzás közben képkockánként legfeljebb egyszer rajzolunk (18 virágnál ez már számít).
+  let queuedFrame = 0;
+  function renderSoon() {
+    if (queuedFrame) return;
+    queuedFrame = requestAnimationFrame(() => { queuedFrame = 0; render(false); });
+  }
+
   // animate=false: csúszkahúzás közben ne induljon újra minden lépésnél a nyílás.
   function render(animate = true) {
+    if (queuedFrame) { cancelAnimationFrame(queuedFrame); queuedFrame = 0; }
     current = Engine.render(state);
     const art = $('artboard');
     art.classList.toggle('no-anim', !animate);
@@ -313,9 +321,9 @@
     drawTypeIcons();
     render();
   }));
-  $('flower-count').addEventListener('input', event => { state.count = Number(event.target.value); render(false); });
-  $('layer-count').addEventListener('input', event => { state.layers = Number(event.target.value); render(false); });
-  $('variation').addEventListener('input', event => { state.variation = Number(event.target.value); render(false); });
+  $('flower-count').addEventListener('input', event => { state.count = Number(event.target.value); renderSoon(); });
+  $('layer-count').addEventListener('input', event => { state.layers = Number(event.target.value); renderSoon(); });
+  $('variation').addEventListener('input', event => { state.variation = Number(event.target.value); renderSoon(); });
   $('recipient').addEventListener('input', event => { state.to = event.target.value.slice(0, 60); caption(); });
   $('message').addEventListener('input', event => { state.message = event.target.value.slice(0, 240); caption(); });
   $('occasion').addEventListener('change', event => {

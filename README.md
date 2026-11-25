@@ -1,8 +1,15 @@
-# MathBloom v6
+# MathBloom v7
 
 Matematikából, szeretettel. Személyre szabható virágcsokrok, amelyek elforgatott ellipszisekből és irányított véletlenből születnek.
 
 Ez a GitHub Pagesre előkészített változat. A virággenerátor, a fajtaválasztó, a színvilágok, a változatosság csúszka, a címzett és üzenet, az ajándék link és a PNG-képeslap böngészőben működik, magyarul és angolul. Nincs szükség MATLAB-ra vagy buildre.
+
+## Újdonság a v7-ben: akár 18 virág
+
+- A csúszkával 1–18 virág választható (eddig 9).
+- 1–9 virágig a kézzel beállított elrendezés maradt: a régi linkek ugyanazt a csokrot nyitják meg, mint eddig.
+- 10–18 virágnál a helyeket aranyszög-spirál (Vogel-spirál) adja egy kupola alakú csokorban. A virágok kisebbek, hogy elférjenek, középen kicsit nagyobbak, és a csokor mérete 9-ről 10-re sem ugrik.
+- Csúszkahúzás közben képkockánként legfeljebb egyszer rajzol újra, így 18 virágnál is folyamatos marad.
 
 ## Javítás a v6-ban
 
@@ -57,7 +64,7 @@ Ha a honlap már él, a **Settings → Pages** beállításokat nem kell újra e
 
 A honlapcím: https://tomi546258-dev.github.io/mathbloom/
 
-A stíluslap és a szkriptek `?v=6` utótaggal töltődnek be, így a böngészők nem keverik a régi és az új fájlokat.
+A stíluslap és a szkriptek `?v=7` utótaggal töltődnek be, így a böngészők nem keverik a régi és az új fájlokat.
 
 ## Látogatásszámláló
 
@@ -92,6 +99,7 @@ A személyes üzenet a linkben szerepel: a link birtokosa elolvashatja. A honlap
 ## Ellenőrzés
 
 - A virágok azonos seed és beállítások mellett azonosak.
+- 1–9 virágig a v7 bájtra ugyanazt az SVG-t adja, mint a v6 (3000 véletlen beállításon). 10–18 virágnál is igaz, hogy a rétegszám nem változtatja a színeket, a szárakat és a fajtákat, és minden kiválasztott fajta szerepel.
 - A régi, fajta nélküli linkek 3000 véletlen beállításon bitre ugyanazt az SVG-t adják, mint az első változat, a szárjavítástól eltekintve. A v2–v3 linkek bitre ugyanazt adják, mint a v3.
 - `gen=2`-ben a rétegszám nem változtatja a színeket, a szárakat és a fajtákat.
 - `gen=2`-ben a virágszám állításakor a megmaradó virágok megtartják a színüket és a fajtájukat; a helyük a darabszámhoz tartozó elrendezés szerint változik.

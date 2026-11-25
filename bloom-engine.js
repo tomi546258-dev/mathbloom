@@ -1,11 +1,14 @@
 /*
- * MathBloom virággenerátor, v4
+ * MathBloom virággenerátor, v7
  *
  * Minden virág ugyanabból az elforgatott ellipszisből épül. A fajták csak abban
  * térnek el, hogy hány ellipszist, mekkora eltolással és milyen forgatási
  * szabály szerint raknak le.
  *
  * Megismételhetőség: azonos seed és beállítások mellett azonos SVG.
+ *
+ * Elrendezés: 1–9 virágig kézzel beállított helyek (ezek nem változtak), 10–18
+ * virágig aranyszög-spirál egy kupola alakú csokorban (domeLayout).
  *
  * Két generátor-változat van (gen):
  *  - gen 1: egyetlen közös véletlenfolyam. Így rajzolódnak a régi linkek: a
@@ -75,7 +78,36 @@
       8:[[302,257,104],[522,257,103],[682,412,95],[171,412,93],[402,423,115],[258,586,107],[591,556,108],[468,670,99]],
       9:[[304,251,103],[521,226,100],[679,368,96],[168,397,90],[399,408,108],[580,490,100],[241,578,100],[430,633,110],[662,645,93]]
     };
-    return layouts[count].map(([x,y,r],i) => ({x:x+(rnd()-.5)*26*variation,y:y+(rnd()-.5)*24*variation,r:r*(1+(.93+rnd()*.12-1)*variation),rotation:rnd()*360*variation,index:i}));
+    if (layouts[count]) return layouts[count].map(([x,y,r],i) => ({x:x+(rnd()-.5)*26*variation,y:y+(rnd()-.5)*24*variation,r:r*(1+(.93+rnd()*.12-1)*variation),rotation:rnd()*360*variation,index:i}));
+    // 10–18 virág: a helyeket aranyszög-spirál adja egy kupola alakú (elliptikus) csokorban;
+    // a kisebb virágok miatt az elmozdulás a mérettel arányos.
+    return domeLayout(count).map(([x,y,r],i) => {
+      const s = r / 105;
+      return {x:x+(rnd()-.5)*26*variation*s,y:y+(rnd()-.5)*24*variation*s,r:r*(1+(.93+rnd()*.12-1)*variation),rotation:rnd()*360*variation,index:i};
+    });
+  }
+
+  // Vogel-spirál egy ellipszisben: az i-edik hely szöge i·aranyszög, távolsága √((i+½)/n)-nel
+  // arányos, így a virágok egyenletesen töltik ki a kupolát. Kevés pontnál a spirál nem ér ki
+  // egyformán minden irányba, ezért a pontokat a kupola teljes szélességére és magasságára
+  // nyújtjuk. Középen a virágok kicsit nagyobbak. A sorrend fentről lefelé halad, hogy az alsó
+  // virágok takarják a felsőket.
+  function domeLayout(count) {
+    const t = (count - 10) / 8;
+    const ax = 256 + 34 * t, ay = 208 + 27 * t, cx = 430, cy = 432;
+    const base = 1.3 * Math.sqrt(ax * ay / count);
+    const raw = [];
+    for (let i = 0; i < count; i++) {
+      const rho = Math.sqrt((i + .5) / count), angle = i * GOLDEN_ANGLE;
+      raw.push([rho * Math.cos(angle), rho * Math.sin(angle), rho]);
+    }
+    const xs = raw.map(p => p[0]), ys = raw.map(p => p[1]);
+    const midX = (Math.max(...xs) + Math.min(...xs)) / 2, halfX = (Math.max(...xs) - Math.min(...xs)) / 2;
+    const midY = (Math.max(...ys) + Math.min(...ys)) / 2, halfY = (Math.max(...ys) - Math.min(...ys)) / 2;
+    return raw
+      .map(([x, y, rho]) => [cx + (x - midX) / halfX * ax, cy + (y - midY) / halfY * ay, base * (1.1 - .22 * rho)])
+      .sort((a, b) => a[1] - b[1])
+      .map(([x, y, r]) => [Math.round(x), Math.round(y), Math.round(r)]);
   }
 
   // Melyik helyre melyik fajta kerül. Csak a seedtől és a kiválasztott fajtáktól
@@ -117,7 +149,7 @@
   function assignTypesStable(codes, seed) {
     const tr = random(hash32(seed, 0, SALT.types));
     const list = [];
-    while (list.length < 9) {
+    while (list.length < 18) {
       const block = codes.split('');
       for (let i = block.length - 1; i > 0; i--) {
         const j = Math.floor(tr() * (i + 1));
@@ -129,7 +161,7 @@
       }
       list.push(...block);
     }
-    return list.slice(0, 9);
+    return list.slice(0, 18);
   }
 
   // Szár és három levél. A véletlenszámokat ebben a sorrendben húzza:
@@ -374,7 +406,7 @@
 
   function render(options = {}) {
     const seed = Number.isFinite(Number(options.seed)) ? Number(options.seed) >>> 0 : 1738;
-    const count = Math.max(1,Math.min(9,Math.round(Number(options.count)||6)));
+    const count = Math.max(1,Math.min(18,Math.round(Number(options.count)||6)));
     const layers = Math.max(2,Math.min(6,Math.round(Number(options.layers)||4)));
     const variationValue = Number(options.variation);
     const variation = options.variation === undefined || options.variation === null || !Number.isFinite(variationValue) ? 50 : Math.max(0,Math.min(100,Math.round(variationValue)));
